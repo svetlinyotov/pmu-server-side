@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\UserToken;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +15,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'origin' => 'required|in:google,facebook',
+            'origin' => 'required|in:google,facebook,GOOGLE,FACEBOOK',
             'socialId' => 'required',
             'email' => 'required|email',
             'names' => 'required',
@@ -46,7 +45,8 @@ class LoginController extends Controller
         return $insertedUser;
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
 
     }
 }

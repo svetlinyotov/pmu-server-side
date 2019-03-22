@@ -13,9 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(["prefix" => "/v1/app"], function() {
+Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
 
     Route::post('login', 'Api\Auth\LoginController@login');
+
+    Route::get('locations', 'Api\LocationsController@all');
 
 
     Route::middleware('auth.api')->group(function () {

@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS `time_travel`.`users_tokens` ;
 CREATE TABLE IF NOT EXISTS `time_travel`.`users_tokens` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
-  `token` VARCHAR(300) NOT NULL,
+  `token` LONGTEXT NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`, `user_id`),
