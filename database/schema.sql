@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `time_travel`.`locations` (
   `name` VARCHAR(128) NOT NULL,
   `latitude` DOUBLE NOT NULL,
   `longitude` DOUBLE NOT NULL,
+  `description` TEXT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
