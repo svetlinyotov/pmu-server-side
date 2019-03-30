@@ -14,6 +14,11 @@ class LocationsController extends Controller
 
     public function show($id) {
         $info = Location::where("id", $id)->first();
+
+        if ($info == null) {
+            abort(404);
+        }
+
         return view("locations.show",["info" => $info]);
     }
 }
