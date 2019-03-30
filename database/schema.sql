@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `time_travel`.`games` ;
 CREATE TABLE IF NOT EXISTS `time_travel`.`games` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `location_id` INT NOT NULL,
-  `name` VARCHAR(128) NOT NULL,
+  `name` VARCHAR(128) NULL DEFAULT NULL,
   `status` ENUM('pending', 'running', 'finished') NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

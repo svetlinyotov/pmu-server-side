@@ -17,6 +17,7 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
 
     Route::post('login', 'Api\Auth\LoginController@login');
 
+    Route::get('ranking', 'Api\GamesController@ranking');
     Route::get('locations', 'Api\LocationsController@all');
     Route::get('locations/{id}', 'Api\LocationsController@show');
 
