@@ -16,7 +16,7 @@ class Game extends Model
     public static function rankingForUser($user_id)
     {
         return DB::select("
-            SELECT users_with_markers.id as user_id,
+            SELECT users_with_markers.social_id as user_id,
                    users_with_markers.game_id,
                    users_with_markers.game_name,
                    users_with_markers.location_id,
@@ -52,7 +52,7 @@ class Game extends Model
     public static function ranking()
     {
         return DB::select("
-            SELECT users_with_markers.id,
+            SELECT users_with_markers.social_id id,
                    users_with_markers.email,
                    users_with_markers.names,
                    users_with_markers.points_from_markers,
@@ -72,7 +72,7 @@ class Game extends Model
                       WHERE ta.is_correct = 1
                         AND id = ua.answer_id
                      )
-            GROUP BY users_with_markers.id
+            GROUP BY users_with_markers.social_id
             ORDER BY total DESC
         ");
     }
