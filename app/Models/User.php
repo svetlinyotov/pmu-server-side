@@ -39,4 +39,15 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public static function getByHeaders(string $origin, string $socialId, string $token): int
+    {
+        $user = self::select("users.id")
+            ->where(["social_id" => $socialId, "origin" => $origin])
+            ->whereHas("tokens", function ($w) use ($token) {
+                $w->where("token", $token);
+            })->first();
+
+        return ($user->id != null && $user->id > 0) ? $user->id : null;
+    }
 }

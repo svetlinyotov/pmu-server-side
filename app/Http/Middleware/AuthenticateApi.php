@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthenticateApi
 {
@@ -16,7 +17,13 @@ class AuthenticateApi
             $request->hasHeader("AuthSocialId") &&
             User::isTokenValid($request->header("AuthOrigin"), $request->header("AuthSocialId"), $request->header("AccessToken"))
         ) {
-            return $next($request);
+
+            $userId = User::getByHeaders($request->header("AuthOrigin"), $request->header("AuthSocialId"), $request->header("AccessToken"));
+
+            if ($userId != null) {
+                Auth::onceUsingId($userId);
+                return $next($request);
+            }
         }
 
         return response()->json(["error" => "User not authorized"], 401);
