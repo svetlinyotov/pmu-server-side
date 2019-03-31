@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class Game extends Model
 {
-    protected $fillable = ['name', 'latitude', 'longitude'];
+    protected $fillable = ['name', 'location_id', 'status'];
+
+    public function users() {
+        return $this->belongsToMany(User::class, "users_games");
+    }
 
     public static function rankingForUser($user_id)
     {

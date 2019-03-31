@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Game;
-use App\Models\Location;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GamesController extends Controller
@@ -20,14 +20,22 @@ class GamesController extends Controller
         return Game::rankingForUser(Auth::user()->getAuthIdentifier());
     }
 
-    public function show($id)
-    {
-        $info = Location::where("id", $id)->first();
+    public function startSingle(Request $request) {
+        $userId = Auth::user()->getAuthIdentifier();
+        $locationId = $request->post("locationId");
 
-        if ($info == null) {
-            abort(404);
-        }
+        $game = new Game();
+        $game->location_id = $locationId;
+        $game->name = "Play " . date("d M Y");
+        $game->status = "running";
+        $game->save();
 
-        return view("locations.show", ["info" => $info]);
+        $game->users()->sync($userId);
+
+        return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
+    }
+
+    public function startTeam() {
+
     }
 }
