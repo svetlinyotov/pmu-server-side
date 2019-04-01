@@ -35,7 +35,30 @@ class GamesController extends Controller
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
 
-    public function startTeam() {
+    public function createTeam(Request $request) {
+        $userId = Auth::user()->getAuthIdentifier();
+        $locationId = $request->post("locationId");
+        $teamName = $request->post("name");
 
+        $game = new Game();
+        $game->location_id = $locationId;
+        $game->name = $teamName;
+        $game->status = "pending";
+        $game->save();
+
+        $game->users()->sync($userId);
+
+        return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
+    }
+
+    public function joinTeam(Request $request) {
+        $userId = Auth::user()->getAuthIdentifier();
+        $gameId = $request->post("gameId");
+
+        $game = Game::findOrFail($gameId);
+
+        $game->users()->attach($userId);
+
+        return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
 }

@@ -25,6 +25,9 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
     Route::middleware('auth.api')->group(function () {
         Route::post('game/start/single', 'Api\GamesController@startSingle');
         Route::post('game/start/team', 'Api\GamesController@startTeam');
+        Route::post('game/start/team/create', 'Api\GamesController@createTeam');
+        Route::post('game/start/team/join', 'Api\GamesController@joinTeam');
+        Route::post('game/start/team/list', 'Api\GamesController@listTeam');
 
         Route::get('ranking/personal', 'Api\GamesController@rankingPersonal');
         Route::post('logout', 'Api\Auth\LoginController@logout');
