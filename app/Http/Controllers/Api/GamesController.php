@@ -20,7 +20,8 @@ class GamesController extends Controller
         return Game::rankingForUser(Auth::user()->getAuthIdentifier());
     }
 
-    public function startSingle(Request $request) {
+    public function startSingle(Request $request)
+    {
         $userId = Auth::user()->getAuthIdentifier();
         $locationId = $request->post("locationId");
 
@@ -35,7 +36,8 @@ class GamesController extends Controller
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
 
-    public function createTeam(Request $request) {
+    public function createTeam(Request $request)
+    {
         $userId = Auth::user()->getAuthIdentifier();
         $locationId = $request->post("locationId");
         $teamName = $request->post("name");
@@ -51,7 +53,8 @@ class GamesController extends Controller
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
 
-    public function joinTeam(Request $request) {
+    public function joinTeam(Request $request)
+    {
         $userId = Auth::user()->getAuthIdentifier();
         $gameId = $request->post("gameId");
 
@@ -60,5 +63,20 @@ class GamesController extends Controller
         $game->users()->attach($userId);
 
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
+    }
+
+    public function listTeam(Request $request)
+    {
+        $locationId = $request->post("locationId");
+
+        $teams = Game::select("id", "name")
+            ->where([
+                "location_id" => $locationId,
+                "status" => "pending"
+            ])
+            ->orderBy("created_at", "DESC")
+            ->get();
+
+        return response()->json($teams);
     }
 }
