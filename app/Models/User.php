@@ -25,6 +25,12 @@ class User extends Authenticatable
         return $this->hasMany(UserToken::class);
     }
 
+
+    public function games()
+    {
+        return $this->belongsToMany(Game::class, 'users_games');
+    }
+
     public static function isTokenValid(string $origin, string $socialId, string $token): bool
     {
         $countValidUsers = self::select("*")

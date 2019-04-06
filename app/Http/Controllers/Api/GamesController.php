@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -78,5 +79,24 @@ class GamesController extends Controller
             ->get();
 
         return response()->json($teams);
+    }
+
+    public function listTeamPlayers(Request $request)
+    {
+        $gameId = $request->post("gameId");
+
+        $teams = User::select("id", "email", "names")
+            ->whereHas('games', function ($q) use ($gameId) {
+                $q->where('games.id', $gameId);
+            })
+            ->get();
+
+        return response()->json($teams);
+    }
+
+    public function updateUserLocation(Request $request) {
+        $userId = Auth::user()->getAuthIdentifier();
+        $latitude = $request->post("latitude");
+        $longitude = $request->post("longitude");
     }
 }
