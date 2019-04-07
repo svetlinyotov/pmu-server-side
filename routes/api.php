@@ -1,6 +1,8 @@
 <?php
 
+use App\Events\Pusher\BroadcastNewPlayerToTeam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,9 @@ use Illuminate\Http\Request;
 Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
 
     Route::post('login', 'Api\Auth\LoginController@login');
+    Route::get('test', function() {
+        broadcast(new BroadcastNewPlayerToTeam(5, 10, "asd", "fghj"));
+    });
 
     Route::get('ranking', 'Api\GamesController@ranking');
     Route::get('locations', 'Api\LocationsController@all');
@@ -29,6 +34,7 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
         Route::post('game/start/team/join', 'Api\GamesController@joinTeam');
         Route::post('game/start/team/list', 'Api\GamesController@listTeam');
         Route::post('game/start/team/list/players', 'Api\GamesController@listTeamPlayers');
+        Route::post('game/start/team/start', 'Api\GamesController@startTeamGame');
 
         Route::post('game/location', 'Api\GamesController@updateUserLocation');
 

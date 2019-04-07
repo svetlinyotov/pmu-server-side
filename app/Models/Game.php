@@ -45,7 +45,7 @@ class Game extends Model
                                                 AND id = ua.answer_id
                                               )
             GROUP BY users_with_markers.game_id
-            ORDER BY total DESC
+            ORDER BY total DESC, location_id DESC, names DESC
         ", [$user_id]);
     }
 

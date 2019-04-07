@@ -31,7 +31,8 @@ class LoginController extends Controller
             $insertedUser = User::updateOrCreate([
                 'origin' => $request->post("origin"),
                 'social_id' => $request->post("socialId"),
-                'email' => $request->post("email"),
+                'email' => $request->post("email")
+            ], [
                 'names' => $request->post("names"),
                 'avatar' => $request->post("avatar")
             ]);

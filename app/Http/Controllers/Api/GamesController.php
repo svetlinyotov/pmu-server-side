@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Events\Pusher\BroadcastNewPlayerToTeam;
+use App\Events\Pusher\BroadcastTeamGameStart;
+use App\Events\Pusher\BroadcastUserLocation;
 use App\Http\Controllers\Controller;
 use App\Models\Game;
 use App\Models\User;
@@ -37,6 +40,19 @@ class GamesController extends Controller
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
 
+    public function startTeamGame(Request $request)
+    {
+        $gameId = $request->post("gameId");
+
+        $game = Game::find($gameId);
+        $game->status = "running";
+        $game->save();
+
+        broadcast(new BroadcastTeamGameStart($game->id));
+
+        return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
+    }
+
     public function createTeam(Request $request)
     {
         $userId = Auth::user()->getAuthIdentifier();
@@ -61,7 +77,9 @@ class GamesController extends Controller
 
         $game = Game::findOrFail($gameId);
 
-        $game->users()->attach($userId);
+        $game->users()->syncWithoutDetaching($userId);
+
+        broadcast(new BroadcastNewPlayerToTeam($userId, $game->id, Auth::user()->names, Auth::user()->email));
 
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
@@ -95,8 +113,12 @@ class GamesController extends Controller
     }
 
     public function updateUserLocation(Request $request) {
-        $userId = Auth::user()->getAuthIdentifier();
+        $userId = Auth::user()->social_id;
+        $userNames = Auth::user()->names;
+        $gameId = $request->post("gameId");
         $latitude = $request->post("latitude");
         $longitude = $request->post("longitude");
+
+        broadcast(new BroadcastUserLocation($userId, $userNames, $gameId, $latitude, $longitude));
     }
 }
