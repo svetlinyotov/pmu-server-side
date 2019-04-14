@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
 
     Route::post('login', 'Api\Auth\LoginController@login');
-    Route::get('test', function() {
+    Route::get('test', function () {
         broadcast(new BroadcastNewPlayerToTeam(5, 10, "asd", "fghj"));
     });
 
@@ -36,6 +36,9 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
         Route::post('game/start/team/list', 'Api\GamesController@listTeam');
         Route::post('game/start/team/list/players', 'Api\GamesController@listTeamPlayers');
         Route::post('game/start/team/start', 'Api\GamesController@startTeamGame');
+
+        Route::get('game/qr/{id}', 'Api\QRController@show');
+        Route::post('game/qr', 'Api\QRController@foundQR');
 
         Route::post('game/location', 'Api\GamesController@updateUserLocation');
 
