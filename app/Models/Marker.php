@@ -8,11 +8,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Location extends Model
+class Marker extends Model
 {
-    protected $fillable = ['name', 'latitude', 'longitude'];
+    protected $fillable = ['name', 'photo', 'qr_code', 'description', 'points', 'latitude', 'longitude'];
 
-    public function markers() {
-        return $this->hasMany(Marker::class);
+    public function location() {
+        return $this->belongsTo(Location::class);
     }
 }

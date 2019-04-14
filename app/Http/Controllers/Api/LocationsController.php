@@ -8,17 +8,19 @@ use App\Models\Location;
 
 class LocationsController extends Controller
 {
-    public function all() {
-        return Location::all();
+    public function all()
+    {
+        return Location::with("markers")->get();
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $info = Location::where("id", $id)->first();
 
         if ($info == null) {
             abort(404);
         }
 
-        return view("locations.show",["info" => $info]);
+        return view("locations.show", ["info" => $info]);
     }
 }
