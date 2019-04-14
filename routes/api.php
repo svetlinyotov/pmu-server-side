@@ -32,6 +32,7 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
         Route::post('game/start/team', 'Api\GamesController@startTeam');
         Route::post('game/start/team/create', 'Api\GamesController@createTeam');
         Route::post('game/start/team/join', 'Api\GamesController@joinTeam');
+        Route::post('game/start/team/unJoin', 'Api\GamesController@unJoinTeam');
         Route::post('game/start/team/list', 'Api\GamesController@listTeam');
         Route::post('game/start/team/list/players', 'Api\GamesController@listTeamPlayers');
         Route::post('game/start/team/start', 'Api\GamesController@startTeamGame');

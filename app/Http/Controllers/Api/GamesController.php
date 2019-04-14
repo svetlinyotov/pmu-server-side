@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Events\Pusher\BroadcastNewPlayerToTeam;
+use App\Events\Pusher\BroadcastRemovePlayerFromTeam;
 use App\Events\Pusher\BroadcastTeamGameStart;
 use App\Events\Pusher\BroadcastUserLocation;
 use App\Http\Controllers\Controller;
@@ -80,6 +81,20 @@ class GamesController extends Controller
         $game->users()->syncWithoutDetaching($userId);
 
         broadcast(new BroadcastNewPlayerToTeam($userId, $game->id, Auth::user()->names, Auth::user()->email));
+
+        return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
+    }
+
+    public function unJoinTeam(Request $request)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $gameId = $request->post("gameId");
+
+        $game = Game::findOrFail($gameId);
+
+        $game->users()->detach($userId);
+
+        broadcast(new BroadcastRemovePlayerFromTeam($userId, $game->id, Auth::user()->names));
 
         return response()->json(["gameId" => $game->id, "gameName" => $game->name]);
     }
