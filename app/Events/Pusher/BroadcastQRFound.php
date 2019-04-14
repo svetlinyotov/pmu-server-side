@@ -9,14 +9,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 
-class BroadcastUserLocation extends Event implements ShouldBroadcast
+class BroadcastQRFound extends Event implements ShouldBroadcast
 {
 
     use SerializesModels;
 
     public $userId;
-    public $userNames;
     public $gameId;
+    public $name;
     public $latitude;
     public $longitude;
 
@@ -24,14 +24,15 @@ class BroadcastUserLocation extends Event implements ShouldBroadcast
      * BroadcastUserLocation constructor.
      * @param $userId
      * @param $gameId
+     * @param $name
      * @param $latitude
      * @param $longitude
      */
-    public function __construct($userId, $userNames, $gameId, $latitude, $longitude)
+    public function __construct($userId, $gameId, $name, $latitude, $longitude)
     {
         $this->userId = $userId;
-        $this->userNames = $userNames;
         $this->gameId = $gameId;
+        $this->name = $name;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
     }

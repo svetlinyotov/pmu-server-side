@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Events\Pusher\BroadcastQRFound;
 use App\Http\Controllers\Controller;
-use App\Models\Location;
 use App\Models\Marker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +26,8 @@ class QRController extends Controller
 
         if (DB::select("SELECT COUNT(*) as count FROM games_markers WHERE user_id = ? AND marker_id = ?", [$userId, $marker->id])[0]->count == 0) {
             if (DB::insert("INSERT INTO games_markers (game_id, marker_id, user_id) VALUES (?, ?, ?)", [$gameId, $marker->id, $userId]) == 1) {
-                return response()->json("{}", 200);
+                broadcast(new BroadcastQRFound($userId, $gameId, $marker->name, $marker->latitude, $marker->longitude));
+                return response()->json($marker, 200);
             }
         } else {
             return response()->json(["error" => "QR_ALREADY_FOUND"], 400);
