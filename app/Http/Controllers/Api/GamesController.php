@@ -9,9 +9,11 @@ use App\Events\Pusher\BroadcastTeamGameStart;
 use App\Events\Pusher\BroadcastUserLocation;
 use App\Http\Controllers\Controller;
 use App\Models\Game;
+use App\Models\Marker;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GamesController extends Controller
 {
@@ -135,5 +137,17 @@ class GamesController extends Controller
         $longitude = $request->post("longitude");
 
         broadcast(new BroadcastUserLocation($userId, $userNames, $gameId, $latitude, $longitude));
+    }
+
+    public function status($id) {
+        $game = Game::where("id", $id)->first();
+
+        return [
+            'name' => $game->name,
+            'totalMarkers' => DB::select("SELECT COUNT(*) as count FROM markers WHERE location_id = ?", [$game->location_id])[0]->count,
+            'foundMarkers' => DB::select("SELECT COUNT(*) as count FROM games_markers WHERE game_id = ?", [$game->id])[0]->count,
+            'totalScore' => DB::select("SELECT SUM(points) as sum FROM markers LEFT JOIN games_markers ON games_markers.marker_id = markers.id WHERE games_markers.game_id = ? AND location_id = ?", [$id, $game->location_id])[0]->sum,
+            'foundLocations' => Marker::select("id", "location_id", "name", "photo", "qr_code", "points", "latitude", "longitude")->join("games_markers", "games_markers.marker_id", "=", "markers.id")->where("games_markers.game_id", $id)->where("location_id", $game->location_id)->get()
+        ];
     }
 }
