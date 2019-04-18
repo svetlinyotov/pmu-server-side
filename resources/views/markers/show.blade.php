@@ -14,7 +14,7 @@
 
         <div id="templatemo_main">
             <div class="cbox_fw">
-                <img src="/time-travellers/images/markers/{{$info->photo}}" alt="image" class="image_frame image_fl" width="100%"/>
+                <img src="{{asset("images/markers/" . $info->photo)}}" alt="image" class="image_frame image_fl" width="100%"/>
                 {!! $info->description !!}
                 <div class="cleaner"></div>
             </div>
