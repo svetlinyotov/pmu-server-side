@@ -4,7 +4,6 @@
 namespace App\Events\Pusher;
 
 use App\Events\Event;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -19,6 +18,7 @@ class BroadcastQRFound extends Event implements ShouldBroadcast
     public $name;
     public $latitude;
     public $longitude;
+    public $userName;
 
     /**
      * BroadcastUserLocation constructor.
@@ -27,14 +27,16 @@ class BroadcastQRFound extends Event implements ShouldBroadcast
      * @param $name
      * @param $latitude
      * @param $longitude
+     * @param $userName
      */
-    public function __construct($userId, $gameId, $name, $latitude, $longitude)
+    public function __construct($userId, $gameId, $name, $latitude, $longitude, $userName)
     {
         $this->userId = $userId;
         $this->gameId = $gameId;
         $this->name = $name;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->userName = $userName;
     }
 
 

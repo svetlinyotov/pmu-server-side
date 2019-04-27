@@ -150,4 +150,18 @@ class GamesController extends Controller
             'foundLocations' => Marker::select("id", "location_id", "name", "photo", "qr_code", "points", "latitude", "longitude")->join("games_markers", "games_markers.marker_id", "=", "markers.id")->where("games_markers.game_id", $id)->where("location_id", $game->location_id)->get()
         ];
     }
+
+    public function getInfoAfterAllMarkersFound($id) {
+        $game = Game::where("id", $id)->first();
+
+        $timeStart = strtotime($game->created_at);
+        $timeEnd = strtotime("now");
+
+        $timeDiff = $timeEnd - $timeStart;
+
+        return [
+            'timePlay' => gmdate("H:i:s", $timeDiff),
+            'foundMarkers' => DB::select("SELECT COUNT(*) as count FROM games_markers WHERE game_id = ? AND user_id = ?", [$game->id, Auth::user()->id])[0]->count
+        ];
+    }
 }
