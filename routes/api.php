@@ -40,6 +40,7 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
         Route::get('game/qr/{id}', 'Api\QRController@show');
         Route::post('game/qr', 'Api\QRController@foundQR');
         Route::get('game/{id}/status', 'Api\GamesController@status');
+        Route::post('game/{id}/all_markers', 'Api\GamesController@getInfoAfterAllMarkersFound');
 
         Route::get('game/{id}/test', 'Api\GamesController@generateQuestions');
         Route::post('game/{id}/test', 'Api\GamesController@submitTestsAnswers');

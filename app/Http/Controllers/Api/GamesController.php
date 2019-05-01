@@ -155,6 +155,20 @@ class GamesController extends Controller
         ];
     }
 
+    public function getInfoAfterAllMarkersFound($id) {
+        $game = Game::where("id", $id)->first();
+
+        $timeStart = strtotime($game->created_at);
+        $timeEnd = strtotime("now");
+
+        $timeDiff = $timeEnd - $timeStart;
+
+        return [
+            'timePlay' => gmdate("H:i:s", $timeDiff),
+            'foundMarkers' => DB::select("SELECT COUNT(*) as count FROM games_markers WHERE game_id = ? AND user_id = ?", [$game->id, Auth::user()->id])[0]->count
+        ];
+    }
+
     public function generateQuestions($id)
     {
         $userId = Auth::user()->getAuthIdentifier();
