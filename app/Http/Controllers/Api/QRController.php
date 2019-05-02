@@ -26,7 +26,7 @@ class QRController extends Controller
 
         if (DB::select("SELECT COUNT(*) as count FROM games_markers WHERE game_id = ? AND marker_id = ?", [$gameId, $marker->id])[0]->count == 0) {
             if (DB::insert("INSERT INTO games_markers (game_id, marker_id, user_id) VALUES (?, ?, ?)", [$gameId, $marker->id, $userId]) == 1) {
-                broadcast(new BroadcastQRFound($userId, $gameId, $marker->name, $marker->latitude, $marker->longitude, Auth::user()->names));
+                broadcast(new BroadcastQRFound($request->header("AuthSocialId"), $gameId, $marker->name, $marker->latitude, $marker->longitude, Auth::user()->names));
                 return response()->json($marker, 200);
             }
         } else {

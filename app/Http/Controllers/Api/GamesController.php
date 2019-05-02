@@ -155,7 +155,8 @@ class GamesController extends Controller
         ];
     }
 
-    public function getInfoAfterAllMarkersFound($id) {
+    public function getInfoAfterAllMarkersFound($id)
+    {
         $game = Game::where("id", $id)->first();
 
         $timeStart = strtotime($game->created_at);
@@ -190,7 +191,8 @@ class GamesController extends Controller
         return $data;
     }
 
-    public function submitTestsAnswers($id, Request $request) {
+    public function submitTestsAnswers($id, Request $request)
+    {
         $userId = Auth::user()->getAuthIdentifier();
         $game = Game::where("id", $id)->first();
 
@@ -203,5 +205,32 @@ class GamesController extends Controller
         }
 
         response()->json("{}", 200);
+    }
+
+    public function finish($id)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+
+        DB::update("UPDATE games SET status = 'finished' WHERE id = ?", [$id]);
+
+        return [
+            'markersFound' =>
+                DB::select("
+                    SELECT COUNT(*) markers_count
+                    FROM games_markers gm
+                    WHERE gm.game_id = ? AND gm.user_id = ?
+                    GROUP BY gm.user_id
+                ", [$id, $userId])[0]->markers_count,
+
+            'correctAnswers' => DB::select("
+                    SELECT COUNT(*) answers_count
+                    FROM users_answers ua
+                    JOIN test_answers ta ON ta.id = ua.answer_id 
+                    WHERE ua.game_id = ? AND ua.user_id = ? AND ta.is_correct = 1
+                    GROUP BY ua.user_id
+                ", [$id, $userId])[0]->answers_count,
+
+        ];
+
     }
 }

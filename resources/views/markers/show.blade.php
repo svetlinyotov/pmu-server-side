@@ -9,7 +9,7 @@
 <body>
     <div id="templatemo_wrapper">
         <div id="templatemo_header">
-            <h2>{{$info->name}}</h2>
+            <h2 style="line-height: 30px">{{$info->name}}</h2>
         </div>
 
         <div id="templatemo_main">

@@ -44,6 +44,7 @@ Route::group(["prefix" => "/time-travellers/api/v1/app"], function () {
 
         Route::get('game/{id}/test', 'Api\GamesController@generateQuestions');
         Route::post('game/{id}/test', 'Api\GamesController@submitTestsAnswers');
+        Route::post('game/{id}/finish', 'Api\GamesController@finish');
 
         Route::post('game/location', 'Api\GamesController@updateUserLocation');
 
